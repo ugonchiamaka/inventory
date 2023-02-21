@@ -12,9 +12,12 @@ interface iData {
   manufacturing_date: string;
 }
 
-const initialState = {
-  data: [] as Array<iData>,
-  totalqty: 0,
+interface iDatas {
+  myData: iData[];
+}
+
+const initialState: iDatas = {
+  myData: [],
 };
 
 const ReduxState = createSlice({
@@ -22,11 +25,10 @@ const ReduxState = createSlice({
   initialState,
   reducers: {
     addData: (state, { payload }: PayloadAction<iData>) => {
-      state.data.push({ ...payload });
+      state.myData.push({ ...payload });
       //   let id = 0;
       //   id += 1;
       //   const check = state.data.findIndex((el) => el.id === payload.id);
-
       //   if (check >= 0) {
       //     state.data.push({ ...payload });
       //   } else {
@@ -37,7 +39,8 @@ const ReduxState = createSlice({
     },
 
     removeData: (state, { payload }) => {
-      state.data.filter((el) => el.color !== payload);
+      console.log("pay", { payload });
+      state.myData = state.myData.filter((item) => item.id !== payload.id);
     },
   },
 });

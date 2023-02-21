@@ -22,7 +22,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Controller } from "react-hook-form";
 import { ICreateEntry } from "interfaces/interfaces";
 import { addData } from "../GlobalRedux/ReduxState";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 //import { format } from "date-fns";
 
 const CreateEntryDrawer = ({ open, setOpen, id }: any) => {
@@ -31,6 +31,9 @@ const CreateEntryDrawer = ({ open, setOpen, id }: any) => {
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const [classId, setClassId] = useState("");
   const [selectedOption, setSelectedOption] = useState<string>("");
+
+  let dataCoutn = useSelector((state: any) => state.myData);
+  console.log(dataCoutn.length, "shownum");
 
   const dispatch = useDispatch();
 
@@ -48,6 +51,9 @@ const CreateEntryDrawer = ({ open, setOpen, id }: any) => {
     power_value: Yup.number().required("Power Number is required"),
     color: Yup.string().required("color  is required"),
     weight_value: Yup.string().required("Weight Value is required"),
+    // machine_types: Yup.object().required("Machine Type is required"),
+    // machine_attributes: Yup.string().required("Machine Attribute is required"),
+    // manufacturing_date: Yup.any().required("Machine Date is required"),
   });
 
   const resolver = yupResolver(schema);
@@ -55,6 +61,7 @@ const CreateEntryDrawer = ({ open, setOpen, id }: any) => {
     defaultValues,
     resolver,
   });
+  let iD = watch("id");
   const machineType = watch("machine_types");
   const attributes = watch("machine_attributes");
   const color = watch("color");
@@ -70,8 +77,9 @@ const CreateEntryDrawer = ({ open, setOpen, id }: any) => {
 
   const onSubmit = (data: ICreateEntry) => {
     console.log(data);
+
     const val = {
-      id: id + 1,
+      id: dataCoutn.length + 1,
       machine_types: machineType,
       machine_attributes: attributes,
       color: color,
@@ -306,7 +314,7 @@ const CreateEntryDrawer = ({ open, setOpen, id }: any) => {
                   rules={{
                     required: {
                       value: true,
-                      message: "Enter Machine type",
+                      message: "Enter Machine color",
                     },
                   }}
                   render={({
